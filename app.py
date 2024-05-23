@@ -12,7 +12,7 @@ def hello():
 
 @app.route("/contacts/")
 def contacts():
-    return 'my phone number is 555 123456'
+    return render_template("contacts.html", contacts='my phone number is 555 123456')
 
 
 @app.route("/products/")
@@ -21,9 +21,11 @@ def products():
     return render_template("products.html", products=products)
 
 
-@app.route("/products/<int:product_id>/<name>")
-def product(product_id, name):
-    return f'{all_products[product_id][0]} sold to {name}, price: {all_products[product_id][1]}'
+@app.route("/products/<int:product_id>/")
+def product(product_id):
+    product = all_products[product_id]
+    return render_template("product.html", product=product)
+
 
 @app.route("/example/<name>")
 def example(name):

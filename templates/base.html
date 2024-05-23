@@ -1,0 +1,11 @@
+ <html><head><title>My shop - {% block title %}{% endblock %}</title></head>
+    <body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="{{ url_for('products') }}">Products</a>
+        <a href="{{ url_for('contacts') }}">Contacts</a>
+        <a href="https:facebook.com/mypage">Follow us on FB</a>
+    </nav>
+    {% block content %} {% endblock %}
+    </body>
+    </html>
