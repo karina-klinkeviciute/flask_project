@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, render_template
 
 from products import all_products
 
@@ -17,23 +17,17 @@ def contacts():
 
 @app.route("/products/")
 def products():
-    products = """
-    <html><head><title>Products</title></head>
-    <body>
-    <ul>
-        <li>Product 1</li>
-        <li>Product 2</li>
-        <li>Product 3</li>
-    </ul>
-    </body>
-    </html>
-    """
-    return products
+    products = all_products
+    return render_template("products.html", products=products)
 
 
 @app.route("/products/<int:product_id>/<name>")
 def product(product_id, name):
     return f'{all_products[product_id][0]} sold to {name}, price: {all_products[product_id][1]}'
+
+@app.route("/example/<name>")
+def example(name):
+    return render_template("example_template.html", name=name)
 
 
 

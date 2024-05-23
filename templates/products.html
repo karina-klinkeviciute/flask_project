@@ -1,0 +1,9 @@
+ <html><head><title>Products</title></head>
+    <body>
+    <ul>
+        {% for id, product in products.items() %}
+        <li>product {{ id }}: {{ product.name }}. Price: {{ product.price }}</li>
+        {% endfor %}
+    </ul>
+    </body>
+    </html>
