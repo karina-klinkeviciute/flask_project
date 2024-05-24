@@ -2,13 +2,20 @@
      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
  </head>
     <body>
-    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
+
+    <header>
+        <img src="{{ url_for('static', filename='img/logo.jpg')}}">
     <nav>
         <a href="/">Home</a>
         <a href="{{ url_for('products') }}">Products</a>
         <a href="{{ url_for('contacts') }}">Contacts</a>
         <a href="https:facebook.com/mypage">Follow us on FB</a>
     </nav>
+    </header>
+    <aside>something</aside>
     {% block content %} {% endblock %}
+
+    <footer>some footer info</footer>
+    <script>'some javascript'</script>
     </body>
     </html>
