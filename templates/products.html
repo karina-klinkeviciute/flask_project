@@ -6,8 +6,8 @@
         Price list:
 
         <ul>
-            {% for id, product in products.items() %}
-            <li>product {{ id }}: <a href="{{ url_for('product', product_id=id) }}">{{ product.name }}</a>. Price: {{ product.price }}</li>
+            {% for product in products %}
+            <li> <a href="{{ url_for('product', product_id=product.id) }}">{{ product.name }}</a>. Price: {{ product.price }}</li>
             {% endfor %}
         </ul>
 

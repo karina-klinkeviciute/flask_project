@@ -24,7 +24,7 @@ admin.add_view(ModelView(Product, db.session))
 # routes
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', email=session.get("email"))
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -45,36 +45,44 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    return 'login'
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+        if user and user.password == password:
+            session['email'] = email
+            return redirect(url_for('home'))
+        else:
+            return render_template('login.html', message='Invalid email or password')
+    return render_template('login.html')
 
 
 @app.route('/logout')
 def logout():
-    return 'logout'
+    session.pop('email', None)
+    return redirect(url_for('home'))
 
 
 @app.route("/contacts/")
 def contacts():
-    return render_template("contacts.html", contacts='my phone number is 555 123456')
+    return render_template("contacts.html", contacts='my phone number is 555 123456', email=session.get("email"))
 
 
 @app.route("/products/")
 def products():
-    products = all_products
-    return render_template("products.html", products=products)
+    products = Product.query.all()
+    return render_template("products.html", products=products, email=session.get("email"))
 
 
 @app.route("/products/<int:product_id>/")
 def product(product_id):
-    product = all_products[product_id]
-    return render_template("product.html", product=product)
+    product = Product.query.get(product_id)
+    return render_template("product.html", product=product, email=session.get("email"))
 
 
 @app.route("/example/<name>")
 def example(name):
-    return render_template("example_template.html", name=name)
-
-
+    return render_template("example_template.html", name=name, email=session.get("email"))
 
 
 if __name__ == '__main__':

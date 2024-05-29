@@ -18,9 +18,9 @@
 
 <div class="navbar">
     <a class="{% if active == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a>
-    {% if username %}
+    {% if email %}
         <a href="{{ url_for('logout') }}">Logout</a>
-        <span style="float:right; color:white; padding-right: 20px;">Hello, {{ username }}!</span>
+        <div style="float:right; color:black; padding-right: 20px;">Hello, {{ email }}!</div>
     {% else %}
         <a href="{{ url_for('register') }}">Register</a>
         <a href="{{ url_for('login') }}">Login</a>
