@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
@@ -11,7 +12,7 @@ class Product(db.Model):
     image_url = db.Column(db.String(80), nullable=True)
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     display_name = db.Column(db.String(80))
     email = db.Column(db.String(80), unique=True, nullable=False)
