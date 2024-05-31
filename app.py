@@ -6,20 +6,38 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
 
-from models import db, Product, User
-
+from models import db, Product, User, Post, UserProfile, Tag
 
 app: Flask = Flask(__name__)
 
 # database initiation
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///products.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///new.db'
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 db.init_app(app)
+migrate = Migrate(app, db)
 
 # admin
 admin = Admin(app)
 admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(UserProfile, db.session))
 admin.add_view(ModelView(Product, db.session))
+
+class TagView(ModelView):
+    column_hide_backrefs = False
+    column_list = ("name", "posts")
+
+admin.add_view(TagView(Tag, db.session))
+
+class PostView(ModelView):
+    column_list = ("title", "content", "author")
+    column_hide_backrefs = False
+
+admin.add_view(PostView(Post, db.session))
+
+
+# class UserView(ModelView):
+#     column_hide_backrefs = False
+#     column_list = ('email', 'active', 'roles')
 
 # login
 login_manager = LoginManager(app)
@@ -32,6 +50,25 @@ def load_user(user_id):
 
 
 bcrypt = Bcrypt(app)
+
+
+@app.route('/post/new', methods=['GET', 'POST'])
+@login_required
+def new_post():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        post = Post(title=title, content=content, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('create_post.html', title='New Post')
+
+
+@app.route('/post/<int:post_id>')
+def post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('post.html', title=post.title, post=post)
 
 
 @app.errorhandler(404)
@@ -47,7 +84,8 @@ def internal_server_error(error):
 # routes
 @app.route('/')
 def home():
-    return render_template('index.html')
+    posts = Post.query.all()
+    return render_template('index.html', posts=posts)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -114,5 +152,6 @@ def example(name):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+
     migrate = Migrate(app, db)
     app.run(debug=True)

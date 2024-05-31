@@ -3,5 +3,18 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h1>Welcome to the Home Page</h1>
+        <div class="content-section">
+        <h2>All Posts</h2>
+        <ul>
+            {% for post in posts %}
+                <li>
+                    <h3><a href="{{url_for('post', post_id=post.id)}}">{{ post.title }}</a></h3>
+                    <p>{{ post.content }}</p>
+                    <p>Posted on: {{ post.date_posted.strftime('%Y-%m-%d') }}</p>
+                    <p>Posted by: {{ post.author.username }} </p>
+
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
