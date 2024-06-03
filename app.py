@@ -1,3 +1,5 @@
+import os
+
 from flask_bcrypt import Bcrypt
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -7,12 +9,16 @@ from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
 
 from models import db, Product, User, Post, UserProfile, Tag
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 app: Flask = Flask(__name__)
 
 # database initiation
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///new.db'
-app.config['SECRET_KEY'] = 'your_secret_key_here'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///new2.db'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 db.init_app(app)
 migrate = Migrate(app, db)
 
@@ -154,4 +160,4 @@ if __name__ == '__main__':
         db.create_all()
 
     migrate = Migrate(app, db)
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
