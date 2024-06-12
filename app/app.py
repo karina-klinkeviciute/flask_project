@@ -2,11 +2,12 @@ import os
 
 from flask_bcrypt import Bcrypt
 from flask import Flask, render_template, request, redirect, url_for, session
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
+from pymongo import MongoClient
 
 from models import db, Product, User, Post, UserProfile, Tag
 from dotenv import load_dotenv
@@ -14,7 +15,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+client = MongoClient("mongodb://mongo:27017/")
+mongo_db = client.mydatabase
+collection = mongo_db.mycollection
+
 app: Flask = Flask(__name__)
+
 
 # database initiation
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///new2.db'
@@ -48,6 +54,21 @@ admin.add_view(PostView(Post, db.session))
 # login
 login_manager = LoginManager(app)
 login_manager.login_view = 'home'
+
+
+@app.route('/mongo_index/')
+def index():
+    # Insert a document into MongoDB
+    collection.insert_one({"message": "Hello from MongoDB!"})
+
+    # Retrieve documents from MongoDB
+    documents = collection.find()
+
+    message = ""
+    for doc in documents:
+        message += doc["message"] + "<br>"
+
+    return f"<h1>{message}</h1>"
 
 
 @login_manager.user_loader
