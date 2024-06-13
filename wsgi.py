@@ -8,4 +8,4 @@ if __name__ == '__main__':
         db.create_all()
 
     migrate = Migrate(app, db)
-    app.run()
+    app.run(host="0.0.0.0")
