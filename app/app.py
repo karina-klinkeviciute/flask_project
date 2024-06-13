@@ -174,11 +174,3 @@ def product(product_id):
 @app.route("/example/<name>")
 def example(name):
     return render_template("example_template.html", name=name)
-
-
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-
-    migrate = Migrate(app, db)
-    app.run(debug=False, host="0.0.0.0")
