@@ -1,7 +1,7 @@
 from flask_migrate import Migrate
 
-from app.app import app
-from app.models import db
+from project.app import app
+from project.models import db
 
 if __name__ == '__main__':
     with app.app_context():

@@ -9,7 +9,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
 from pymongo import MongoClient
 
-from models import db, Product, User, Post, UserProfile, Tag
+from project.models import db, Product, User, Post, UserProfile, Tag
 from dotenv import load_dotenv
 
 
